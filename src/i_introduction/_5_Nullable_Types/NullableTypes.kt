@@ -70,6 +70,6 @@ fun sendMessageToClient(
 class Client (val personalInfo: PersonalInfo?)
 class PersonalInfo (val email: String?)
 
-interface Mailer {
+trait Mailer {
     fun sendMessage(email: String, message: String)
 }

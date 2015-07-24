@@ -6,7 +6,7 @@ class Outer { // implicit label @Outer
             use(this@Outer, this@Inner, this@foo)
             this == this@foo
 
-            val fl: String.() -> Boolean = S@{
+            val fl: String.() -> Boolean = @S{
                 use(this, this@S)
                 this == this@S
             }
@@ -18,9 +18,9 @@ class Outer { // implicit label @Outer
     }
 }
 
-interface A { fun a() {} }
-interface B { fun b() {} }
-interface C { fun c() {} }
+@interface A { fun a() {} }
+@interface B { fun b() {} }
+@interface C { fun c() {} }
 fun B.foo(f: C.()->Unit) = f
 
 fun labelsForExtensionFunctionLiterals(a: A, b: B) {
