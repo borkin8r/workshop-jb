@@ -18,14 +18,14 @@ class Outer { // implicit label @Outer
     }
 }
 
-@interface A { fun a() {} }
-@interface B { fun b() {} }
-@interface C { fun c() {} }
+trait A { fun a() {} }
+trait B { fun b() {} }
+trait C { fun c() {} }
 fun B.foo(f: C.()->Unit) = f
 
 fun labelsForExtensionFunctionLiterals(a: A, b: B) {
-    with (a) A@{
-        with (b) B@{
+    with (a) @A{ //<-- fix with declaration; rest pointer on red line
+        with (b) @B{
             foo {
                 this == this@foo
                 c()
