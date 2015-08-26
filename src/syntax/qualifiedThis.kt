@@ -6,7 +6,7 @@ class Outer { // implicit label @Outer
             use(this@Outer, this@Inner, this@foo)
             this == this@foo
 
-            val fl: String.() -> Boolean = @S{
+            val fl: String.() -> Boolean = S@{
                 use(this, this@S)
                 this == this@S
             }
@@ -24,8 +24,8 @@ trait C { fun c() {} }
 fun B.foo(f: C.()->Unit) = f
 
 fun labelsForExtensionFunctionLiterals(a: A, b: B) {
-    with (a) @A{ //<-- fix with declaration; rest pointer on red line
-        with (b) @B{
+    with (a) A@{ //<-- fix with declaration; rest pointer on red line
+        with (b) B@{
             foo {
                 this == this@foo
                 c()
