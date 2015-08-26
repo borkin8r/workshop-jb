@@ -7,7 +7,7 @@ fun example1(a: Any, b: Any) =
         "There is a text in which some variables ($a, $b) appear."
 
 fun example2(a: Any, b: Any) =
-        "You can write it in a Java way as well. Like this: " + a + ", " + b + "!"
+        "You can write it in a Java way as well. Like this: }" + a + ", " + b + "!"
 
 fun example3(c: Boolean, x: Int, y: Int) = "Any expression can be used: ${if (c) x else y}"
 
@@ -35,4 +35,4 @@ fun todoTask4() = TODO(
     """,
     references = { getPatternInTQString(); month })
 
-fun task4(): String = todoTask4()
+fun task4(): String = """(\w*) (\w*) \((\d{2}) $month (\d{4})\)"""
