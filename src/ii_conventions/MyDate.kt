@@ -18,6 +18,9 @@ data class MyDate(val year: Int, val month: Int, val dayOfMonth: Int) : Comparab
         else
             return 0
     }
+    public fun rangeTo(otherDate: MyDate): DateRange {
+        return DateRange(this, otherDate)
+    }
 }
 
 enum class TimeInterval {
@@ -26,8 +29,10 @@ enum class TimeInterval {
     YEAR
 }
 
-class DateRange(public val start: MyDate, public val end: MyDate): Iterator<MyDate> {
+class DateRange(public val start: MyDate, public val end: MyDate): Iterator<MyDate>{
+
     private var previousDate = MyDate(-1, -1, -1)
+
     public override fun hasNext(): Boolean {
         if (previousDate.dayOfMonth == -1) {
             previousDate = MyDate(start.year, start.month, start.dayOfMonth) //put date correcting code in here, next just returns date validated in hasNext
