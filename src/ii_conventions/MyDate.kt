@@ -29,9 +29,13 @@ enum class TimeInterval {
     YEAR
 }
 
-class DateRange(public val start: MyDate, public val end: MyDate): Iterator<MyDate>{
-
+class DateRange(public override val start: MyDate, public override val end: MyDate): Iterator<MyDate>, Range<MyDate> {
+    //for iterating with hasnext and next
     private var previousDate = MyDate(-1, -1, -1)
+
+    public override fun contains(proposedDate: MyDate): Boolean {
+        return if (proposedDate >= start && proposedDate <= end) true else false
+    }
 
     public override fun hasNext(): Boolean {
         if (previousDate.dayOfMonth == -1) {
