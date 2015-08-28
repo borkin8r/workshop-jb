@@ -18,15 +18,116 @@ data class MyDate(val year: Int, val month: Int, val dayOfMonth: Int) : Comparab
         else
             return 0
     }
+
     public fun rangeTo(otherDate: MyDate): DateRange {
         return DateRange(this, otherDate)
     }
+
+    public fun plus(interval: TimeInterval): MyDate {
+
+        if ( interval == TimeInterval.DAY ) {
+            //TODO assumes 30 day month, doesnt handle leap year
+            //fastforward by 1 day
+            val nextDay = if ( ( this.dayOfMonth + 1 ) % 30 == 0 ) 30 else ( this.dayOfMonth + 1 ) % 30
+
+            if (nextDay == 1) {
+                val nextMonth = if ( ( this.month + 1 ) % 12 == 0 ) 12 else this.month + 1
+
+                if ( nextMonth == 1) {
+                    val nextYear = this.year + 1
+
+                    return MyDate(nextYear, nextMonth, nextDay)
+                }
+
+                return MyDate(this.year, nextMonth, nextDay)
+            }
+
+            return MyDate(this.year, this.month, nextDay)
+        } else if ( interval == TimeInterval.WEEK ) {
+            //TODO assumes 30 day month, doesn't handle leap year
+            //fastforward by 7 days
+            val nextDay = if ( ( this.dayOfMonth + 7 ) % 30 == 0 ) 30 else ( this.dayOfMonth + 7 ) % 30
+
+            if (nextDay in 1..7) {
+                val nextMonth = if ( ( this.month + 1 ) % 12 == 0 ) 12 else this.month + 1
+
+                if ( nextMonth == 1) {
+                    val nextYear = this.year + 1
+
+                    return MyDate(nextYear, nextMonth, nextDay)
+                }
+
+                return MyDate(this.year, nextMonth, nextDay)
+            }
+
+            return MyDate(this.year, this.month, nextDay)
+        } else {
+            //is time interval year
+            //fastforward by 1 year
+            return MyDate(this.year + 1, this.month, this.dayOfMonth) //TODO handle leap year
+        }
+
+    }
+
+    public fun plus(repeatedInterval: RepeatedTimeInterval): MyDate {
+        //TODO assumes 30 day month, doesnt handle leap year
+
+        if ( repeatedInterval.ti == TimeInterval.DAY ) {
+            //fastforward by ri.n days
+            val monthsElapsed = ( repeatedInterval.n + this.dayOfMonth ) / 30
+            val yearsElapsed = ( repeatedInterval.n + this.dayOfMonth ) / 365
+            val nextDay = if ( ( this.dayOfMonth + repeatedInterval.n ) % 30 == 0 ) 30 else ( this.dayOfMonth + repeatedInterval.n ) % 30
+
+            if ( monthsElapsed > 0 ) {
+                val nextMonth = if ( ( this.month + monthsElapsed ) % 12 == 0 ) 12 else this.month + monthsElapsed
+
+                if ( yearsElapsed > 0 ) {
+                    val nextYear = this.year + yearsElapsed
+
+                    return MyDate(nextYear, nextMonth, nextDay)
+                }
+
+                return MyDate(this.year, nextMonth, nextDay)
+            }
+
+            return MyDate(this.year, this.month, nextDay)
+        } else if ( repeatedInterval.ti == TimeInterval.WEEK ) {
+            //fastforward by ri.n * 7 days
+            val monthsElapsed = ( ( repeatedInterval.n * 7 ) + this.dayOfMonth ) / 30
+            val yearsElapsed = ( ( repeatedInterval.n * 7 ) + this.dayOfMonth ) / 365
+            val nextDay = if ( ( this.dayOfMonth + ( repeatedInterval.n * 7)  ) % 30 == 0 ) 30 else ( this.dayOfMonth + ( repeatedInterval.n * 7 ) ) % 30
+
+            if ( monthsElapsed > 0 ) {
+                val nextMonth = if ( ( this.month + monthsElapsed ) % 12 == 0 ) 12 else this.month + monthsElapsed
+
+                if ( yearsElapsed > 0 ) {
+                    val nextYear = this.year + yearsElapsed
+
+                    return MyDate(nextYear, nextMonth, nextDay)
+                }
+
+                return MyDate(this.year, nextMonth, nextDay)
+            }
+
+            return MyDate(this.year, this.month, nextDay)
+        } else {
+            //time interval is a year
+            //fastforward by ri.n * 1 year
+            return MyDate(this.year + repeatedInterval.n, this.month, this.dayOfMonth) //TODO handle leap year
+        }
+
+    }
 }
 
+class RepeatedTimeInterval(val ti: TimeInterval, val n: Int = 1)
+
 enum class TimeInterval {
-    DAY
-    WEEK
-    YEAR
+    DAY,
+    WEEK,
+    YEAR,
+    public fun times(multiplier: Int): RepeatedTimeInterval {
+         return RepeatedTimeInterval(this, multiplier)
+    }
 }
 
 class DateRange(public override val start: MyDate, public override val end: MyDate): Iterator<MyDate>, Range<MyDate> {
