@@ -122,9 +122,9 @@ data class MyDate(val year: Int, val month: Int, val dayOfMonth: Int) : Comparab
 class RepeatedTimeInterval(val ti: TimeInterval, val n: Int = 1)
 
 enum class TimeInterval {
-    DAY,
-    WEEK,
-    YEAR,
+    DAY
+    WEEK
+    YEAR
     public fun times(multiplier: Int): RepeatedTimeInterval {
          return RepeatedTimeInterval(this, multiplier)
     }
@@ -145,7 +145,7 @@ class DateRange(public override val start: MyDate, public override val end: MyDa
             //increment day of month
             var nextDay = previousDate.dayOfMonth + 1
             var wasThirtyDayMonth = false
-            val thirtyDayMonths = intArrayOf(4, 6, 9, 11)
+            val thirtyDayMonths = intArray(4, 6, 9, 11)
             for (month in thirtyDayMonths.indices)
                 if (this.start.month == month) {
                     nextDay %= 30
