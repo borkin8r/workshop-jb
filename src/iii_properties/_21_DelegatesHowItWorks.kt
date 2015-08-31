@@ -27,9 +27,17 @@ class D {
 
 class EffectiveDate<R> : ReadWriteProperty<R, MyDate> {
     var timeInMillis: Long? = null
+    private var thisRef: R? = null
+    private var desc: PropertyMetadata? = null
 
-    override fun get(thisRef: R, desc: PropertyMetadata): MyDate = todoTask21()
-    override fun set(thisRef: R, desc: PropertyMetadata, value: MyDate) = todoTask21()
+    override fun get(thisRef: R, desc: PropertyMetadata): MyDate {
+        return timeInMillis!!.toDate()
+    }
+    override fun set(thisRef: R, desc: PropertyMetadata, value: MyDate) {
+        $timeInMillis = value.toMillis()
+        $thisRef = thisRef
+        $desc = desc
+    }
 }
 
 fun MyDate.toMillis(): Long {
